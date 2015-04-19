@@ -48,7 +48,7 @@ $(function() {
     });
 
 
-    /* "The menu" , contains tests  related to the menu in the 
+    /* "The menu" test suite , contains tests  related to the menu in the 
      * application.
      */
     describe("The menu",function(){
@@ -80,19 +80,24 @@ $(function() {
           });
     });
 
-    /* TODO: Write a new test suite named "Initial Entries" */
+    /* " Initial Entries " test suite contains tests related to the initial number 
+     * feeds that are loaded
+     */
     describe("Initial Entries", function() {
-        /* TODO: Write a test that ensures when the loadFeed
-         * function is called and completes its work, there is at least
-         * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test wil require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
-         */
-
+        
+        // call loadFeed for a particular feed.
+        // pass done as loadFeed is async call
         beforeEach(function(done) {
+
+            //load feeds for "CSS Tricks" (second entry in allFeeds array)
+            // pass done as the callback function
             loadFeed(1,done)
         });
-         
+
+        /* This test ensures that loadFeed fetches the entries and that 
+         * they are greater than zero and also 
+         * these entries are part of the .feed container
+         */
          it('should be greater than zero',function(done) {
             var numberOfEntries = $('.feed .entry').length;
             expect(numberOfEntries).toBeGreaterThan(0);
@@ -100,28 +105,33 @@ $(function() {
          });
     });
 
-    /* TODO: Write a new test suite named "New Feed Selection"*/
+    /* "New Feed Selection" contains tests related to 
+     * functionality which loads feeds based on the menu selection
+     */
     describe("New Feed Selection", function() {
-        /* TODO: Write a test that ensures when a new feed is loaded
-         * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
-         */
-        var entryExists;
+        
+        var currentFeedEntries;
+        
         beforeEach(function(done) {
-            //check if existing feed has entries
-            entryExists = $('.feed .entry h2').text();
-            alert(entryExists);
-            loadFeed(2,done)
+            //save current feed entries
+            currentFeedEntries = $('.feed .entry h2').text();
+            //load feed entries for the dif category
+            loadFeed(2,done);
         });
 
+        /* This test fixture tests, if content actually changes
+         * after new feed is loaded.
+         */
         it('new feed loaded',function(done) {
-            var newEntry = $('.feed .entry h2').text();
-            expect(entryExists).not.toBe(newEntry);
+
+            var newFeedEntries = $('.feed .entry h2').text();
+            expect(currentFeedEntries).not.toBe(newFeedEntries);
             done();
         });
 
+        //go back to earlier feed selection
         afterEach(function(done) {
-            loadFeed(1,done);
+            loadFeed(0,done);
         });
     });
     
